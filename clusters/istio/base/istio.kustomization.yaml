@@ -7,7 +7,7 @@ spec:
   interval: 5m
   dependsOn:
     - name: helm-repositories
-  path: "../istio"
+  path: "./clusters/istio/istio"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -22,7 +22,7 @@ spec:
   interval: 5m
   dependsOn:
     - name: istio
-  path: "../istio-ingress"
+  path: "./clusters/istio/istio-ingress"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -37,7 +37,7 @@ spec:
   interval: 5m
   dependsOn:
     - name: istio-ingress
-  path: "../bookinfo-example"
+  path: "./clusters/istio/bookinfo-example"
   prune: true
   sourceRef:
     kind: GitRepository
