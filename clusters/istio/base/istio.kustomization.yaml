@@ -36,7 +36,7 @@ metadata:
 spec:
   interval: 5m
   dependsOn:
-    - name: istio
+    - name: istio-daemon
   path: "./clusters/istio/istio-ingress"
   prune: true
   sourceRef:
