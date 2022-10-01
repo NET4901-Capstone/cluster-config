@@ -46,6 +46,7 @@ spec:
   prune: true
   dependsOn:
     - name: nsm-ns
+    - name: spire
   sourceRef:
     kind: GitRepository
     name: deployment-k8s
