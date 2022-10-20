@@ -46,7 +46,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./clusters/linkerd_simple_chain/services"
+  path: "./clusters/linkerd-simple-chain/services"
   prune: true
   dependsOn:
     - name: linkerd
