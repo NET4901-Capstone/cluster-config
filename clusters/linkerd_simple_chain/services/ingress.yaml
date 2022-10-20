@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sfc-ingress
+  namespace: sfc
+  annotations:
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: vnf-1-svc
+      port:
+        number: 80

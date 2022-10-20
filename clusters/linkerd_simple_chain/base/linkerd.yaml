@@ -1,0 +1,55 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: helm-repositories
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./helm_repositories"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: linkerd
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./common/linkerd/base"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: services
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/linkerd_simple_chain/services"
+  prune: true
+  dependsOn:
+    - name: linkerd
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: ingress_nginx
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./common/ingress_nginx"
+  prune: true
+  dependsOn:
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
