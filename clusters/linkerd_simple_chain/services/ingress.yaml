@@ -6,7 +6,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/service-upstream: "true"
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      more_set_headers "SFC-chain: 1";
+      proxy_set_header SFC-Chain-Id "external";
 spec:
   ingressClassName: nginx
   defaultBackend:
