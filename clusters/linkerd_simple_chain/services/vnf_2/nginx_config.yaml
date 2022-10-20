@@ -17,6 +17,7 @@ data:
         location / {
           proxy_set_header vnf-2 "";
           proxy_pass http://whoami-svc;
+          proxy_pass_request_headers      on;
         }
       }
     }

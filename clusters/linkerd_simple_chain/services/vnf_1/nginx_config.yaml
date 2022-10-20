@@ -17,6 +17,7 @@ data:
         location / {
           proxy_set_header vnf-1 "";
           proxy_pass http://vnf-2-svc;
+          proxy_pass_request_headers      on;
         }
       }
     }
