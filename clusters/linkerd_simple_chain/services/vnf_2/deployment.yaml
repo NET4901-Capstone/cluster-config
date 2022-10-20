@@ -15,7 +15,15 @@ spec:
     spec:
       containers:
         - name: vnf-2
-          image: containous/whoami:v1.4.0
+          image: nginx
           ports:
-            - name: http
-              containerPort: 80
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: vnf-2-config
