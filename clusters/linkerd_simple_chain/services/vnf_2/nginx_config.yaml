@@ -12,11 +12,11 @@ data:
     }
     http {
       server {
-          listen       80;
-          server_name  localhost;
-          location / {
-            proxy_set_header vnf-2 "";
-            proxy_pass http://whoami-svc
+        listen       80;
+        server_name  localhost;
+        location / {
+          proxy_set_header vnf-2 "";
+          proxy_pass http://whoami-svc;
         }
       }
     }
