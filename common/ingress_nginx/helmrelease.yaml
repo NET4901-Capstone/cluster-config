@@ -18,5 +18,5 @@ spec:
       ingressClassResource:
         enabled: true
         default: true
-      admissionWebhook:
+      admissionWebhooks:
         enabled: false
