@@ -16,13 +16,11 @@ data:
         server_name  localhost;
         proxy_http_version 1.1;
         location / {
+          set $vnf_path "VNF-1"
           if ($http_vnf_path) {
-              proxy_set_header vnf-path "$http_vnf_path, VNF-1";
+              set $vnf_path "$http_vnf_path, VNF-1";
           }
-          if (!$http_vnf_path) {
-              proxy_set_header vnf-path "VNF-1";
-          }
-          proxy_set_header vnf-path "VNF-1";
+          proxy_set_header vnf-path $vnf_path;
           proxy_pass http://whoami-svc;
           proxy_pass_request_headers      on;
         }
