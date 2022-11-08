@@ -14,6 +14,7 @@ data:
       server {
         listen       80;
         server_name  localhost;
+        proxy_http_version 1.1;
         location / {
           proxy_set_header vnf-path "$http_vnf_path, VNF-2";
           proxy_pass http://whoami-svc;
