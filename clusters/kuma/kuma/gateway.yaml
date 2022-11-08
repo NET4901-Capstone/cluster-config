@@ -22,6 +22,5 @@ spec:
     listeners:
       - port: 8080
         protocol: HTTP
-        hostname: foo.example.com
         tags:
           port: http/8080
