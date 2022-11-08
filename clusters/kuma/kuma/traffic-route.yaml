@@ -18,5 +18,5 @@ spec:
               exact: "1"
         destination:
           kuma.io/service: vnf-2-svc_sfc_svc_80
-    destination:
-      kuma.io/service: whoami-svc_sfc_svc_80
+    # destination:
+    #   kuma.io/service: whoami-svc_sfc_svc_80
