@@ -20,11 +20,7 @@ spec:
         kuma.io/service: edge-gateway
   conf:
     listeners:
-      - port: 8080
+      - port: 80
         protocol: HTTP
         tags:
-          port: http/8080
-      - port: 8081
-        protocol: HTTP
-        tags:
-          port: http/8081
+          port: http/80
