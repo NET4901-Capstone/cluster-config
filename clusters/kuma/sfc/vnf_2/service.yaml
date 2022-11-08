@@ -7,6 +7,6 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 80
+      appProtocol: http
   selector:
     app: vnf-2
