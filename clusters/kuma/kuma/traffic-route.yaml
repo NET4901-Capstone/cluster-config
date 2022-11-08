@@ -6,11 +6,11 @@ metadata:
 spec:
   sources:
     - match:
-        kuma.io/service: backend_default_svc_80
+        kuma.io/service: chain-01
   destinations:
     - match:
-        kuma.io/service: redis_default_svc_6379
+        kuma.io/service: whoami-svc_sfc_svc_80
   conf:
     http:
       destination:
-        kuma.io/service: backend_default_svc_80
+        kuma.io/service: vnf-1-svc_sfc_svc_80
