@@ -16,7 +16,7 @@ data:
         server_name  localhost;
         location / {
           proxy_set_header vnf-path "VNF-1";
-          proxy_pass http://vnf-2-svc;
+          proxy_pass http://whoami-svc;
           proxy_pass_request_headers      on;
         }
       }

@@ -6,7 +6,7 @@ metadata:
 spec:
   sources:
     - match:
-        kuma.io/service: edge-gateway
+        kuma.io/service: vnf-1-svc_sfc_svc_80
   destinations:
     - match:
         kuma.io/service: whoami-svc_sfc_svc_80
@@ -17,12 +17,6 @@ spec:
             Chain-Id:
               exact: "1"
         destination:
-          kuma.io/service: vnf-1-svc_sfc_svc_80
-      - match:
-          headers:
-            Chain-Id:
-              exact: "2"
-        destination:
           kuma.io/service: vnf-2-svc_sfc_svc_80
     destination:
-      kuma.io/service: vnf-1-svc_sfc_svc_80
+      kuma.io/service: whoami-svc_sfc_svc_80
