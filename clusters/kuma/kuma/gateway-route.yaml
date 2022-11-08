@@ -36,7 +36,7 @@ spec:
                 value: /chain2
           backends:
             - destination:
-                kuma.io/service: vnf-1-svc_sfc_svc_80
+                kuma.io/service: vnf-2-svc_sfc_svc_80
           filters:
             - requestHeader:
                 set:
