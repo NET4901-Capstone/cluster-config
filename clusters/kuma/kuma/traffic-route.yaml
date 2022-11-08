@@ -11,6 +11,5 @@ spec:
     - match:
         kuma.io/service: whoami-svc_sfc_svc_80
   conf:
-    http:
-      destination:
-        kuma.io/service: vnf-1-svc_sfc_svc_80
+    destination:
+      kuma.io/service: vnf-1-svc_sfc_svc_80
