@@ -20,6 +20,38 @@ spec:
   interval: 5m
   path: "./common/kuma"
   prune: true
+  dependsOn:
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: kuma-resources
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma/kuma"
+  prune: true
+  dependsOn:
+    - name: kuma
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: sfc
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma/sfc"
+  prune: true
+  dependsOn:
+    - name: kuma-resources
   sourceRef:
     kind: GitRepository
     name: flux-system
