@@ -1,0 +1,23 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: vnf-1-config
+  namespace: sfc
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  10240;
+    }
+    http {
+      server {
+        listen       80;
+        server_name  localhost;
+        location / {
+          proxy_set_header vnf-path "VNF-1";
+          proxy_pass http://vnf-2-svc;
+          proxy_pass_request_headers      on;
+        }
+      }
+    }

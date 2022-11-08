@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vnf-2
+  namespace: sfc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vnf-2
+  template:
+    metadata:
+      labels:
+        app: vnf-2
+    spec:
+      containers:
+        - name: vnf-2
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: vnf-2-config

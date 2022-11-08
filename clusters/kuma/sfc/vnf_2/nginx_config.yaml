@@ -1,0 +1,23 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: vnf-2-config
+  namespace: sfc
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  10240;
+    }
+    http {
+      server {
+        listen       80;
+        server_name  localhost;
+        location / {
+          proxy_set_header vnf-path "$http_vnf_path, VNF-2";
+          proxy_pass http://whoami-svc;
+          proxy_pass_request_headers      on;
+        }
+      }
+    }
