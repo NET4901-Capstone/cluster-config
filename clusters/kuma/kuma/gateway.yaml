@@ -2,7 +2,7 @@ apiVersion: kuma.io/v1alpha1
 kind: MeshGatewayInstance
 metadata:
   name: edge-gateway
-  namespace: default
+  namespace: sfc
 spec:
   replicas: 1
   serviceType: LoadBalancer
@@ -24,3 +24,7 @@ spec:
         protocol: HTTP
         tags:
           port: http/8080
+      - port: 8081
+        protocol: HTTP
+        tags:
+          port: http/8081

@@ -2,7 +2,7 @@ apiVersion: kuma.io/v1alpha1
 kind: MeshGatewayRoute
 mesh: default
 metadata:
-  name: edge-gateway-route
+  name: chain-01
 spec:
   selectors:
     - match:
@@ -21,5 +21,31 @@ spec:
           filters:
             - requestHeader:
                 set:
-                  - name: Pog-header
-                    value: Goated
+                  - name: Chain-Id
+                    value: "1"
+---
+apiVersion: kuma.io/v1alpha1
+kind: MeshGatewayRoute
+mesh: default
+metadata:
+  name: chain-02
+spec:
+  selectors:
+    - match:
+        kuma.io/service: edge-gateway
+        port: http/8081
+  conf:
+    http:
+      rules:
+        - matches:
+            - path:
+                match: PREFIX
+                value: /
+          backends:
+            - destination:
+                kuma.io/service: whoami-svc_sfc_svc_80
+          filters:
+            - requestHeader:
+                set:
+                  - name: Chain-Id
+                    value: "2"

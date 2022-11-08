@@ -1,0 +1,16 @@
+apiVersion: kuma.io/v1alpha1
+kind: TrafficRoute
+mesh: default
+metadata:
+  name: redirect-test
+spec:
+  sources:
+    - match:
+        kuma.io/service: backend_default_svc_80
+  destinations:
+    - match:
+        kuma.io/service: redis_default_svc_6379
+  conf:
+    http:
+      destination:
+        kuma.io/service: backend_default_svc_80
