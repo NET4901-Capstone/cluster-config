@@ -29,7 +29,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./clusters/netmesh/netmesh"
+  path: "./clusters/netmesh/nsm-base"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -58,10 +58,10 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./examples/features/nse-composition/"
+  path: "./clusters/netmesh/netmesh"
   prune: true
   dependsOn:
     - name: nsm
   sourceRef:
     kind: GitRepository
-    name: deployment-k8s
+    name: flux-system

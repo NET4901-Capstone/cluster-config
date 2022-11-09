@@ -2,8 +2,3 @@
 kind: Namespace
 metadata:
   name: ns-nse-composition
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: nsm-system
