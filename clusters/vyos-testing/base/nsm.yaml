@@ -21,7 +21,7 @@ spec:
   path: "./clusters/vyos-testing/vyos"
   prune: true
   dependsOn:
-    - name: nsm
+    - name: nsm-deploy
   sourceRef:
     kind: GitRepository
     name: flux-system
