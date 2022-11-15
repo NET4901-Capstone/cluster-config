@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: nsm
+  name: nsm-deploy
   namespace: flux-system
 spec:
   interval: 5m
@@ -14,7 +14,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: nsm
+  name: vyos
   namespace: flux-system
 spec:
   interval: 5m
