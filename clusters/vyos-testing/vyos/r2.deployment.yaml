@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: R2
+  name: r2
   namespace: vyos-testing
 spec:
   selector:
     matchLabels:
-      app: R2
+      app: r2
   template:
     metadata:
       labels:
-        app: R2
+        app: r2
       annotations:
         networkservicemesh.io: kernel://vyos-testing/nsm-1
     spec:
       containers:
-        - name: R2
+        - name: r2
           image: vyos/vyos-build:current
           resources:
             limits:
