@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: R1
+  namespace: vyos-testing
+spec:
+  selector:
+    matchLabels:
+      app: R1
+  template:
+    metadata:
+      labels:
+        app: R1
+      annotations:
+        networkservicemesh.io: kernel://vyos-testing/nsm-1
+    spec:
+      containers:
+        - name: R1
+          image: vyos/vyos-build:current
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          # ports:
+          #   - containerPort: <Port>
