@@ -1,0 +1,52 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: deployment-k8s
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    tag: v1.5.0
+  url: https://github.com/networkservicemesh/deployments-k8s
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: spire
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./examples/spire"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: deployment-k8s
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: nsm-ns
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./common/nsm/nsm"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: nsm
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./examples/basic"
+  prune: true
+  dependsOn:
+    - name: nsm-ns
+    - name: spire
+  sourceRef:
+    kind: GitRepository
+    name: deployment-k8s
