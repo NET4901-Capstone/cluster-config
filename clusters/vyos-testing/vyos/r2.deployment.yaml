@@ -50,7 +50,8 @@ spec:
               memory: 80Mi
               cpu: 200m
         - name: r2
-          image: vyos/vyos-build:current
+          # image: vyos/vyos-build:current
+          image: ubuntu
           resources:
             limits:
               memory: "128Mi"
