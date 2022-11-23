@@ -1,0 +1,543 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: networkserviceendpoints.networkservicemesh.io
+spec:
+  conversion:
+    strategy: None
+  group: networkservicemesh.io
+  names:
+    kind: NetworkServiceEndpoint
+    listKind: NetworkServiceEndpointList
+    plural: networkserviceendpoints
+    shortNames:
+      - nse
+      - nses
+    singular: networkserviceendpoint
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          properties:
+            spec:
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: networkservices.networkservicemesh.io
+spec:
+  conversion:
+    strategy: None
+  group: networkservicemesh.io
+  names:
+    kind: NetworkService
+    listKind: NetworkServiceList
+    plural: networkservices
+    shortNames:
+      - netsvc
+      - netsvcs
+    singular: networkservice
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          properties:
+            spec:
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admission-webhook-sa
+  namespace: nsm-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nsmgr-sa
+  namespace: nsm-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: registry-k8s-sa
+  namespace: nsm-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+  name: admission-webhook-role
+rules:
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - mutatingwebhookconfigurations
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nsmgr-binding-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - patch
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+      - services
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+  name: registry-k8s-role
+rules:
+  - apiGroups:
+      - networkservicemesh.io
+    resources:
+      - networkservices
+      - networkserviceendpoints
+    verbs:
+      - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admission-webhook-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admission-webhook-role
+subjects:
+  - kind: ServiceAccount
+    name: admission-webhook-sa
+    namespace: nsm-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nsmgr-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nsmgr-binding-role
+subjects:
+  - kind: ServiceAccount
+    name: nsmgr-sa
+    namespace: nsm-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: registry-k8s-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: registry-k8s-role
+subjects:
+  - kind: ServiceAccount
+    name: registry-k8s-sa
+    namespace: nsm-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: admission-webhook-k8s
+  name: admission-webhook-svc
+  namespace: nsm-system
+spec:
+  ports:
+    - port: 443
+      targetPort: 443
+  selector:
+    app: admission-webhook-k8s
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: nsm-system
+spec:
+  ports:
+    - name: registry
+      port: 5002
+      protocol: TCP
+      targetPort: 5002
+  selector:
+    app: registry
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: admission-webhook-k8s
+  name: admission-webhook-k8s
+  namespace: nsm-system
+spec:
+  selector:
+    matchLabels:
+      app: admission-webhook-k8s
+  template:
+    metadata:
+      labels:
+        app: admission-webhook-k8s
+    spec:
+      containers:
+        - env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_SERVICE_NAME
+              value: admission-webhook-svc
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NSM_ANNOTATION
+              value: networkservicemesh.io
+            - name: NSM_CONTAINER_IMAGES
+              value: ghcr.io/networkservicemesh/cmd-nsc:v1.6.1
+            - name: NSM_INIT_CONTAINER_IMAGES
+              value: ghcr.io/networkservicemesh/cmd-nsc-init:v1.6.1
+            - name: NSM_LABELS
+              value: spiffe.io/spiffe-id:true
+            - name: NSM_ENVS
+              value: NSM_LOG_LEVEL=TRACE
+          image: ghcr.io/networkservicemesh/cmd-admission-webhook-k8s:v1.6.1
+          imagePullPolicy: IfNotPresent
+          name: admission-webhook-k8s
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 443
+              scheme: HTTPS
+      serviceAccount: admission-webhook-sa
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: registry
+  name: registry-k8s
+  namespace: nsm-system
+spec:
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+        spiffe.io/spiffe-id: "true"
+    spec:
+      containers:
+        - env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: REGISTRY_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: REGISTRY_K8S_LOG_LEVEL
+              value: TRACE
+            - name: REGISTRY_K8S_LISTEN_ON
+              value: tcp://:5002
+            - name: REGISTRY_K8S_PROXY_REGISTRY_URL
+              value: nsmgr-proxy:5004
+          image: ghcr.io/networkservicemesh/cmd-registry-k8s:v1.6.1
+          imagePullPolicy: IfNotPresent
+          name: registry
+          ports:
+            - containerPort: 5002
+              hostPort: 5002
+          resources:
+            limits:
+              cpu: 200m
+              memory: 40Mi
+            requests:
+              cpu: 100m
+          volumeMounts:
+            - mountPath: /run/spire/sockets
+              name: spire-agent-socket
+      serviceAccountName: registry-k8s-sa
+      volumes:
+        - hostPath:
+            path: /run/spire/sockets
+            type: Directory
+          name: spire-agent-socket
+        - hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+          name: nsm-socket
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: forwarder-vpp
+  name: forwarder-vpp
+  namespace: nsm-system
+spec:
+  selector:
+    matchLabels:
+      app: forwarder-vpp
+  template:
+    metadata:
+      labels:
+        app: forwarder-vpp
+        spiffe.io/spiffe-id: "true"
+    spec:
+      containers:
+        - env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_TUNNEL_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NSM_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
+            - name: NSM_LISTEN_ON
+              value: unix:///listen.on.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          image: ghcr.io/networkservicemesh/cmd-forwarder-vpp:v1.6.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - /bin/grpc-health-probe
+                - -spiffe
+                - -addr=unix:///listen.on.sock
+            failureThreshold: 25
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          name: forwarder-vpp
+          readinessProbe:
+            exec:
+              command:
+                - /bin/grpc-health-probe
+                - -spiffe
+                - -addr=unix:///listen.on.sock
+            failureThreshold: 120
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: 525m
+              memory: 500Mi
+            requests:
+              cpu: 150m
+          securityContext:
+            privileged: true
+          startupProbe:
+            exec:
+              command:
+                - /bin/grpc-health-probe
+                - -spiffe
+                - -addr=unix:///listen.on.sock
+            failureThreshold: 25
+            periodSeconds: 5
+          volumeMounts:
+            - mountPath: /run/spire/sockets
+              name: spire-agent-socket
+              readOnly: true
+            - mountPath: /var/lib/networkservicemesh
+              name: nsm-socket
+            - mountPath: /var/lib/kubelet
+              name: kubelet-socket
+            - mountPath: /host/sys/fs/cgroup
+              name: cgroup
+            - mountPath: /host/dev/vfio
+              name: vfio
+            - mountPath: /var/run/vpp/external
+              name: vpp
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      hostPID: true
+      volumes:
+        - hostPath:
+            path: /run/spire/sockets
+            type: Directory
+          name: spire-agent-socket
+        - hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+          name: nsm-socket
+        - hostPath:
+            path: /var/lib/kubelet
+            type: Directory
+          name: kubelet-socket
+        - hostPath:
+            path: /sys/fs/cgroup
+            type: Directory
+          name: cgroup
+        - hostPath:
+            path: /dev/vfio
+            type: DirectoryOrCreate
+          name: vfio
+        - hostPath:
+            path: /var/run/vpp
+            type: DirectoryOrCreate
+          name: vpp
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: nsmgr
+  name: nsmgr
+  namespace: nsm-system
+spec:
+  selector:
+    matchLabels:
+      app: nsmgr
+  template:
+    metadata:
+      labels:
+        app: nsmgr
+        spiffe.io/spiffe-id: "true"
+    spec:
+      containers:
+        - env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_REGISTRY_URL
+              value: registry:5002
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NSM_LISTEN_ON
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock,tcp://:5001
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          image: ghcr.io/networkservicemesh/cmd-nsmgr:v1.6.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - /bin/grpc-health-probe
+                - -spiffe
+                - -addr=:5001
+            failureThreshold: 25
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          name: nsmgr
+          ports:
+            - containerPort: 5001
+              hostPort: 5001
+          readinessProbe:
+            exec:
+              command:
+                - /bin/grpc-health-probe
+                - -spiffe
+                - -addr=:5001
+            failureThreshold: 120
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: 400m
+              memory: 200Mi
+            requests:
+              cpu: 200m
+              memory: 100Mi
+          startupProbe:
+            exec:
+              command:
+                - /bin/grpc-health-probe
+                - -spiffe
+                - -addr=:5001
+            failureThreshold: 25
+            periodSeconds: 5
+          volumeMounts:
+            - mountPath: /run/spire/sockets
+              name: spire-agent-socket
+              readOnly: true
+            - mountPath: /var/lib/networkservicemesh
+              name: nsm-socket
+            - mountPath: /var/lib/networkservicemesh/config/
+              name: exclude-prefixes-volume
+        - env:
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+          image: ghcr.io/networkservicemesh/cmd-exclude-prefixes-k8s:v1.6.1
+          imagePullPolicy: IfNotPresent
+          name: exclude-prefixes
+          resources:
+            limits:
+              cpu: 75m
+              memory: 40Mi
+          volumeMounts:
+            - mountPath: /var/lib/networkservicemesh/config/
+              name: exclude-prefixes-volume
+      serviceAccount: nsmgr-sa
+      volumes:
+        - hostPath:
+            path: /run/spire/sockets
+            type: Directory
+          name: spire-agent-socket
+        - hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+          name: nsm-socket
+        - emptyDir: {}
+          name: exclude-prefixes-volume
