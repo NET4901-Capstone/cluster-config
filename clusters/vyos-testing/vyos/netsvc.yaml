@@ -3,5 +3,16 @@ kind: NetworkService
 metadata:
   name: vyos-testing
   namespace: vyos-testing
+  matches:
+    - source_selector:
+        app: r1
+      routes:
+        - destination_selector:
+            app: r2
+    - source_selector:
+        app: r2
+      routes:
+        - destination_selector:
+            app: r3
 spec:
   payload: ETHERNET

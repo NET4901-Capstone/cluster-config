@@ -11,16 +11,57 @@ spec:
     metadata:
       labels:
         app: r1
-      annotations:
-        networkservicemesh.io: kernel://vyos-testing/nsm-1
+        "spiffe.io/spiffe-id": "true"
     spec:
       containers:
-        - name: r1
-          image: ubuntu
+        - name: nse
+          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
+            - name: NSM_CIDR_PREFIX
+              value: 172.16.1.100/31
+            - name: NSM_SERVICE_NAMES
+              value: vyos-testing
+            - name: NSM_REGISTER_SERVICE
+              value: "true"
+            - name: NSM_LABELS
+              value: "app:r1"
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+              readOnly: true
           resources:
+            requests:
+              cpu: 100m
+              memory: 40Mi
             limits:
-              memory: "128Mi"
-              cpu: "500m"
+              memory: 80Mi
+              cpu: 200m
+        - name: r1
+          # image: vyos/vyos-build:current
+          image: ubuntu
           command: ["/bin/bash", "-c", "sleep 3600"]
           # ports:
           #   - containerPort: <Port>
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
