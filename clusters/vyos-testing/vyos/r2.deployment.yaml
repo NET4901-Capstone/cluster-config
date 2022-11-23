@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: r2
+        "spiffe.io/spiffe-id": "true"
     spec:
       containers:
         - name: nse
