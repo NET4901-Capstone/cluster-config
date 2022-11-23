@@ -16,10 +16,11 @@ spec:
     spec:
       containers:
         - name: r1
-          image: vyos/vyos-build:current
+          image: ubuntu
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
+          command: ["/bin/bash", "-c", "sleep 3600"]
           # ports:
           #   - containerPort: <Port>
