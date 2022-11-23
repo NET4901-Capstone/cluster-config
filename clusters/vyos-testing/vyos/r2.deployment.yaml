@@ -32,7 +32,7 @@ spec:
             - name: NSM_SERVICE_NAMES
               value: vyos-testing
             - name: NSM_REGISTER_SERVICE
-              value: "false"
+              value: "true"
             # - name: NSM_LABELS
             #   value: "app:gateway"
           volumeMounts:
@@ -52,6 +52,7 @@ spec:
         - name: r2
           # image: vyos/vyos-build:current
           image: ubuntu
+          command: ["/bin/bash", "-c", "sleep 3600"]
           # ports:
           #   - containerPort: <Port>
       volumes:
