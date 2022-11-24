@@ -16,7 +16,7 @@ spec:
       containers:
         - name: nse
           # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
-          image: markmckessock/cmd-nse-icmp-responder-vpp:no-ipam
+          image: markmckessock/cmd-nse-icmp-responder-vpp:tap
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
@@ -46,7 +46,7 @@ spec:
               readOnly: true
         - name: nse2
           # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
-          image: markmckessock/cmd-nse-icmp-responder-vpp:no-ipam
+          image: markmckessock/cmd-nse-icmp-responder-vpp:tap
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
@@ -78,7 +78,8 @@ spec:
         - name: r2
           # image: vyos/vyos-build:current
           image: ubuntu
-          command: ["/bin/bash", "-c", "sleep 3600"]
+          command:
+            ["apt update && apt install -y iproute2 iputils-ping && sleep 3600"]
           # ports:
           #   - containerPort: <Port>
       volumes:

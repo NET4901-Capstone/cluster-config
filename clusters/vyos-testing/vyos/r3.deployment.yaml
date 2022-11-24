@@ -18,6 +18,7 @@ spec:
         - name: r3
           # image: vyos/vyos-build:current
           image: ubuntu
-          command: ["/bin/bash", "-c", "sleep 3600"]
+          command:
+            ["apt update && apt install -y iproute2 iputils-ping && sleep 3600"]
           # ports:
           #   - containerPort: <Port>
