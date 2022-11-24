@@ -1,7 +1,7 @@
 apiVersion: networkservicemesh.io/v1
 kind: NetworkService
 metadata:
-  name: vyos-testing
+  name: vyos-testing-2
   namespace: nsm-system
 spec:
   payload: ETHERNET
