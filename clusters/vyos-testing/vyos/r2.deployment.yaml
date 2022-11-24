@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: nse
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
+          # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
+          image: markmckessock/cmd-nse-icmp-responder-vpp:no-ipam
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
@@ -51,7 +52,8 @@ spec:
               memory: 80Mi
               cpu: 200m
         - name: nse2
-          image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
+          # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
+          image: markmckessock/cmd-nse-icmp-responder-vpp:no-ipam
           imagePullPolicy: IfNotPresent
           env:
             - name: SPIFFE_ENDPOINT_SOCKET
