@@ -19,6 +19,10 @@ spec:
           # image: vyos/vyos-build:current
           image: ubuntu
           command:
-            ["apt update && apt install -y iproute2 iputils-ping && sleep 3600"]
+            [
+              "/bin/bash",
+              "-c",
+              "apt update && apt install -y iproute2 iputils-ping && sleep 3600",
+            ]
           # ports:
           #   - containerPort: <Port>
