@@ -44,13 +44,6 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
-          resources:
-            requests:
-              cpu: 100m
-              memory: 40Mi
-            limits:
-              memory: 80Mi
-              cpu: 200m
         - name: nse2
           # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
           image: markmckessock/cmd-nse-icmp-responder-vpp:no-ipam
@@ -82,13 +75,6 @@ spec:
             - name: nsm-socket
               mountPath: /var/lib/networkservicemesh
               readOnly: true
-          resources:
-            requests:
-              cpu: 100m
-              memory: 40Mi
-            limits:
-              memory: 80Mi
-              cpu: 200m
         - name: r2
           # image: vyos/vyos-build:current
           image: ubuntu
