@@ -12,7 +12,7 @@ spec:
       labels:
         app: r1
       annotations:
-        networkservicemesh.io: kernel://vyos-testing-2/nsm-1
+        networkservicemesh.io: kernel://vyos-testing/nsm-1
     spec:
       containers:
         - name: r1

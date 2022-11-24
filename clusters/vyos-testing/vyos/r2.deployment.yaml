@@ -1,97 +1,97 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: r2
-  namespace: vyos-testing
-spec:
-  selector:
-    matchLabels:
-      app: r2
-  template:
-    metadata:
-      labels:
-        app: r2
-        "spiffe.io/spiffe-id": "true"
-    spec:
-      containers:
-        - name: nse
-          # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
-          image: markmckessock/cmd-nse-icmp-responder-vpp:tap
-          imagePullPolicy: Always
-          env:
-            - name: SPIFFE_ENDPOINT_SOCKET
-              value: unix:///run/spire/sockets/agent.sock
-            - name: NSM_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: NSM_LOG_LEVEL
-              value: TRACE
-            - name: NSM_CONNECT_TO
-              value: unix:///var/lib/networkservicemesh/nsm.io.sock
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.2.100/31
-            - name: NSM_SERVICE_NAMES
-              value: vyos-testing
-            - name: NSM_REGISTER_SERVICE
-              value: "true"
-            - name: NSM_LABELS
-              value: "app:r2"
-          volumeMounts:
-            - name: spire-agent-socket
-              mountPath: /run/spire/sockets
-              readOnly: true
-            - name: nsm-socket
-              mountPath: /var/lib/networkservicemesh
-              readOnly: true
-        - name: nse2
-          # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
-          image: markmckessock/cmd-nse-icmp-responder-vpp:tap
-          imagePullPolicy: Always
-          env:
-            - name: SPIFFE_ENDPOINT_SOCKET
-              value: unix:///run/spire/sockets/agent.sock
-            - name: NSM_NAME
-              # valueFrom:
-              #   fieldRef:
-              #     fieldPath: metadata.name
-              value: "r2-2"
-            - name: NSM_LOG_LEVEL
-              value: TRACE
-            - name: NSM_CONNECT_TO
-              value: unix:///var/lib/networkservicemesh/nsm.io.sock
-            - name: NSM_CIDR_PREFIX
-              value: 172.16.4.100/31
-            - name: NSM_SERVICE_NAMES
-              value: vyos-testing-2
-            - name: NSM_REGISTER_SERVICE
-              value: "true"
-            - name: NSM_LABELS
-              value: "app:r2"
-          volumeMounts:
-            - name: spire-agent-socket
-              mountPath: /run/spire/sockets
-              readOnly: true
-            - name: nsm-socket
-              mountPath: /var/lib/networkservicemesh
-              readOnly: true
-        - name: r2
-          # image: vyos/vyos-build:current
-          image: ubuntu
-          command:
-            [
-              "/bin/bash",
-              "-c",
-              "apt update && apt install -y iproute2 iputils-ping && sleep 3600",
-            ]
-          # ports:
-          #   - containerPort: <Port>
-      volumes:
-        - name: spire-agent-socket
-          hostPath:
-            path: /run/spire/sockets
-            type: Directory
-        - name: nsm-socket
-          hostPath:
-            path: /var/lib/networkservicemesh
-            type: DirectoryOrCreate
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: r2
+#   namespace: vyos-testing
+# spec:
+#   selector:
+#     matchLabels:
+#       app: r2
+#   template:
+#     metadata:
+#       labels:
+#         app: r2
+#         "spiffe.io/spiffe-id": "true"
+#     spec:
+#       containers:
+#         - name: nse
+#           # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
+#           image: markmckessock/cmd-nse-icmp-responder-vpp:tap
+#           imagePullPolicy: Always
+#           env:
+#             - name: SPIFFE_ENDPOINT_SOCKET
+#               value: unix:///run/spire/sockets/agent.sock
+#             - name: NSM_NAME
+#               valueFrom:
+#                 fieldRef:
+#                   fieldPath: metadata.name
+#             - name: NSM_LOG_LEVEL
+#               value: TRACE
+#             - name: NSM_CONNECT_TO
+#               value: unix:///var/lib/networkservicemesh/nsm.io.sock
+#             - name: NSM_CIDR_PREFIX
+#               value: 172.16.2.100/31
+#             - name: NSM_SERVICE_NAMES
+#               value: vyos-testing
+#             - name: NSM_REGISTER_SERVICE
+#               value: "true"
+#             - name: NSM_LABELS
+#               value: "app:r2"
+#           volumeMounts:
+#             - name: spire-agent-socket
+#               mountPath: /run/spire/sockets
+#               readOnly: true
+#             - name: nsm-socket
+#               mountPath: /var/lib/networkservicemesh
+#               readOnly: true
+#         - name: nse2
+#           # image: ghcr.io/networkservicemesh/ci/cmd-nse-icmp-responder:63f3a21
+#           image: markmckessock/cmd-nse-icmp-responder-vpp:tap
+#           imagePullPolicy: Always
+#           env:
+#             - name: SPIFFE_ENDPOINT_SOCKET
+#               value: unix:///run/spire/sockets/agent.sock
+#             - name: NSM_NAME
+#               # valueFrom:
+#               #   fieldRef:
+#               #     fieldPath: metadata.name
+#               value: "r2-2"
+#             - name: NSM_LOG_LEVEL
+#               value: TRACE
+#             - name: NSM_CONNECT_TO
+#               value: unix:///var/lib/networkservicemesh/nsm.io.sock
+#             - name: NSM_CIDR_PREFIX
+#               value: 172.16.4.100/31
+#             - name: NSM_SERVICE_NAMES
+#               value: vyos-testing-2
+#             - name: NSM_REGISTER_SERVICE
+#               value: "true"
+#             - name: NSM_LABELS
+#               value: "app:r2"
+#           volumeMounts:
+#             - name: spire-agent-socket
+#               mountPath: /run/spire/sockets
+#               readOnly: true
+#             - name: nsm-socket
+#               mountPath: /var/lib/networkservicemesh
+#               readOnly: true
+#         - name: r2
+#           # image: vyos/vyos-build:current
+#           image: ubuntu
+#           command:
+#             [
+#               "/bin/bash",
+#               "-c",
+#               "apt update && apt install -y iproute2 iputils-ping && sleep 3600",
+#             ]
+#           # ports:
+#           #   - containerPort: <Port>
+#       volumes:
+#         - name: spire-agent-socket
+#           hostPath:
+#             path: /run/spire/sockets
+#             type: Directory
+#         - name: nsm-socket
+#           hostPath:
+#             path: /var/lib/networkservicemesh
+#             type: DirectoryOrCreate
