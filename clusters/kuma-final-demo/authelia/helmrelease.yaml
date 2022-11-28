@@ -44,7 +44,7 @@ spec:
       extraVolumes:
         - name: authelia-users
           secret:
-            name: authelia-users
+            secretName: authelia-users
             items:
               - key: users_database.yml
                 path: users_database.yml
