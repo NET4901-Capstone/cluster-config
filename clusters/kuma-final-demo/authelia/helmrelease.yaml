@@ -43,7 +43,7 @@ spec:
     pod:
       extraVolumes:
         - name: authelia-users
-          configMap:
+          secret:
             name: authelia-users
             items:
               - key: users_database.yml
