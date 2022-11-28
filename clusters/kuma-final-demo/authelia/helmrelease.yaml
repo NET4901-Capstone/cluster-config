@@ -30,9 +30,10 @@ spec:
         postgres:
           host: postgres-postgresql.authelia.svc
       notifier:
-        disable_startup_check: true
         smtp:
           enabled: false
+        filesystem:
+          enabled: true
       authentication_backend:
         ldap:
           enabled: false
