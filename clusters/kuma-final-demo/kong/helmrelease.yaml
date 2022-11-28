@@ -1,0 +1,16 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kong
+  namespace: kong-gateway
+spec:
+  chart:
+    spec:
+      chart: kong
+      sourceRef:
+        kind: HelmRepository
+        name: kong
+        namespace: flux-system
+      version: 2.13.1
+  interval: 1h
+# TODO: Prometheus service monitor

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-waf
+  namespace: nginx-waf
+spec:
+  selector:
+    matchLabels:
+      app: nginx-waf
+  template:
+    metadata:
+      labels:
+        app: nginx-waf
+    spec:
+      containers:
+        - name: nginx-waf
+          image: owasp/modsecurity-crs:nginx
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80

@@ -1,0 +1,152 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: helm-repositories
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./helm_repositories"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: crds
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/crds"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: kuma
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./common/kuma"
+  prune: true
+  dependsOn:
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cert-manager
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/cert-manager"
+  prune: true
+  dependsOn:
+    - name: crds
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: jaeger
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/jaeger"
+  prune: true
+  dependsOn:
+    - name: kuma
+    - name: helm-repositories
+    - name: crds
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: kong
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/kong"
+  prune: true
+  dependsOn:
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/prometheus-stack"
+  prune: true
+  dependsOn:
+    - name: cert-manager
+    - name: kong
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: bookstack
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/bookstack"
+  prune: true
+  dependsOn:
+    - name: cert-manager
+    - name: kong
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: authentik
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/authentik"
+  prune: true
+  dependsOn:
+    - name: cert-manager
+    - name: kong
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: nginx-waf
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/nginx-waf"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

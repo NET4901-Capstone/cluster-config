@@ -1,0 +1,75 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      interval: 1m
+  timeout: 15m
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
+  values:
+    alertmanager:
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: kong
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts:
+          - alertmanager.kuberbitnetes.xyz
+        tls:
+          - secretName: alertmanager-tls
+            hosts:
+              - alertmanager.kuberbitnetes.xyz
+      alertmanagerSpec:
+        externalUrl: https://alertmanager.kuberbitnetes.xyz
+    grafana:
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: kong
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts:
+          - grafana.kuberbitnetes.xyz
+        tls:
+          - secretName: grafana-tls
+            hosts:
+              - grafana.kuberbitnetes.xyz
+    prometheus:
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: kong
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts:
+          - prometheus.kuberbitnetes.xyz
+        tls:
+          - secretName: prometheus-tls
+            hosts:
+              - prometheus.kuberbitnetes.xyz
+      prometheusSpec:
+        externalUrl: https://prometheus.kuberbitnetes.xyz
+        retentionSize: 5GB
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              # storageClassName: truenas-iscsi-csi
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 5Gi
