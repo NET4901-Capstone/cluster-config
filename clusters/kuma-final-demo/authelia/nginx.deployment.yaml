@@ -38,10 +38,6 @@ spec:
               mountPath: /config/nginx/snippets/authelia-authrequest.conf
               subPath: authelia-authrequest.conf
               readOnly: true
-          command:
-            - "/bin/bash"
-            - "-c"
-            - "sleep 3600"
       volumes:
         - name: nginx-config
           configMap:
