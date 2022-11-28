@@ -25,7 +25,7 @@ spec:
     configMap:
       session:
         redis:
-          host: redis.authelia.svc
+          host: redis-master.authelia.svc
       storage:
         postgres:
           host: postgres.authelia.svc
