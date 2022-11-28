@@ -22,3 +22,13 @@ spec:
         kubernetes.io/tls-acme: "true"
         cert-manager.io/cluster-issuer: letsencrypt-staging
       subdomain: authelia
+    configMap:
+      session:
+        redis:
+          host: redis.authelia.svc
+      storage:
+        postgres:
+          host: postgres.authelia.svc
+    secret:
+      storage:
+        value: authelia
