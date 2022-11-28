@@ -51,6 +51,10 @@ spec:
   dependsOn:
     - name: crds
     - name: helm-repositories
+  healthChecks:
+    - kind: HelmRelease
+      name: cert-manager
+      namespace: cert-manager
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -9,7 +9,7 @@ spec:
       chart: cert-manager
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home
+        name: jetstack
         namespace: flux-system
       version: v1.10.1
   interval: 1h
