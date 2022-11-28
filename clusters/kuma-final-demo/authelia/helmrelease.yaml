@@ -28,7 +28,10 @@ spec:
           host: redis-master.authelia.svc
       storage:
         postgres:
-          host: postgres.authelia.svc
+          host: postgres-postgresql.authelia.svc
+      notifier:
+        smtp:
+          enabled: false
     secret:
       storage:
         value: authelia
