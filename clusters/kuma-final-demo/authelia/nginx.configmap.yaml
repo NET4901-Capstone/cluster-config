@@ -63,13 +63,11 @@ data:
     proxy_send_timeout 360;
     proxy_connect_timeout 360;
   authelia-location.conf: |
-    set $upstream_authelia http://authelia.authelia.svc:9091/api/verify;
-
     ## Virtual endpoint created by nginx to forward auth requests.
     location /authelia {
         ## Essential Proxy Configuration
         internal;
-        proxy_pass $upstream_authelia;
+        proxy_pass http://authelia:9091/api/verify;
 
         ## Headers
         ## The headers starting with X-* are required.
