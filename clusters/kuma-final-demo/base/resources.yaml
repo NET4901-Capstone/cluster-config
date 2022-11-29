@@ -125,23 +125,6 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: authentik
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./clusters/kuma-final-demo/authentik"
-  prune: true
-  dependsOn:
-    - name: cert-manager
-    - name: kong
-    - name: helm-repositories
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
   name: authelia
   namespace: flux-system
 spec:
