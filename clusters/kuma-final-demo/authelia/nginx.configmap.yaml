@@ -17,7 +17,7 @@ data:
 
         include /config/nginx/snippets/authelia-location.conf;
 
-        set $upstream http://whoami.bookstack.svc;
+        set $upstream http://whoami.whoami.svc;
 
         location / {
           include /config/nginx/snippets/proxy.conf;
