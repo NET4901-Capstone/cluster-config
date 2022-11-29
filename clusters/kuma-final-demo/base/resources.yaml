@@ -159,6 +159,23 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
+  name: whoami
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/whoami"
+  prune: true
+  dependsOn:
+    - name: cert-manager
+    - name: kong
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
   name: nginx-waf
   namespace: flux-system
 spec:
