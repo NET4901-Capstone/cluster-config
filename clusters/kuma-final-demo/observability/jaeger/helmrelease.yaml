@@ -13,6 +13,3 @@ spec:
         namespace: flux-system
       version: 2.37.0
   interval: 1h
-  values:
-    jaeger:
-      create: true
