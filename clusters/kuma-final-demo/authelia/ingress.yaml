@@ -5,7 +5,7 @@ metadata:
   namespace: authelia
   annotations:
     kubernetes.io/ingress.class: kong
-    konghq.com/protocol: "https"
+    konghq.com/protocols: "https"
     kubernetes.io/tls-acme: "true"
     cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:

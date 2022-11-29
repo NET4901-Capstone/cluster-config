@@ -20,8 +20,10 @@ spec:
               memory: "128Mi"
               cpu: "500m"
           ports:
-            - containerPort: 80
-            - containerPort: 443
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
           volumeMounts:
             - mountPath: /etc/nginx/nginx.conf
               name: nginx-config
