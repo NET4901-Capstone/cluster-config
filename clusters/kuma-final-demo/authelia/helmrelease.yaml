@@ -45,6 +45,8 @@ spec:
         rules:
           - domain_regex: "bookstack.kuberbitnetes.xyz"
             policy: one_factor
+          - domain_regex: "whoami-auth.kuberbitnetes.xyz"
+            policy: one_factor
 
     pod:
       extraVolumes:
