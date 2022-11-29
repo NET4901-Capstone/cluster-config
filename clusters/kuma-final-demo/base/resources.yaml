@@ -20,6 +20,7 @@ spec:
   interval: 5m
   path: "./clusters/kuma-final-demo/crds"
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -31,25 +32,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./common/kuma"
-  prune: true
-  dependsOn:
-    - name: helm-repositories
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: kuma-dp-config
-  namespace: flux-system
-spec:
-  interval: 5m
   path: "./clusters/kuma-final-demo/kuma"
   prune: true
   dependsOn:
-    - name: kuma
+    - name: crds
+    - name: helm-repositories
   sourceRef:
     kind: GitRepository
     name: flux-system
