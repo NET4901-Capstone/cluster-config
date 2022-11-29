@@ -23,3 +23,8 @@ spec:
       primary:
         persistence:
           enabled: true
+      env:
+        DB_HOST: bookstack
+        DB_USER: bookstack
+        DB_PASS: bookstack
+        DB_DATABASE: bookstack
