@@ -13,11 +13,11 @@ data:
     http {
       server {
         listen 80;
-        server_name bookstack.*;
+        server_name whoami.*;
 
         include /config/nginx/snippets/authelia-location.conf;
 
-        set $upstream http://bookstack.bookstack.svc;
+        set $upstream http://whoami.bookstack.svc;
 
         location / {
           include /config/nginx/snippets/proxy.conf;
