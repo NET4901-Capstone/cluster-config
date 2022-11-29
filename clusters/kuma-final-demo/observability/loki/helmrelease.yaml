@@ -13,3 +13,6 @@ spec:
         namespace: flux-system
       version: 2.8.7
   interval: 1h
+  values:
+    loki:
+      isDefault: false
