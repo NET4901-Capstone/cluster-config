@@ -24,7 +24,7 @@ data:
         include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;
 
-        set $upstream http://bookstack.bookstack.svc;
+        set $upstream http://bookstack.bookstack.svc.cluster.local;
 
         location / {
           include /config/nginx/snippets/proxy.conf;
@@ -40,7 +40,7 @@ data:
         include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;
 
-        set $upstream http://whoami.whoami.svc;
+        set $upstream http://whoami.whoami.svc.cluster.local;
 
         location / {
           include /config/nginx/snippets/proxy.conf;
