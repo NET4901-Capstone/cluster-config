@@ -1,32 +1,32 @@
-apiVersion: jaegertracing.io/v1
-kind: "Jaeger"
-metadata:
-  name: jaeger
-  namespace: observability
-spec:
-  strategy: allInOne
-  allInOne:
-    image: jaegertracing/all-in-one:1.31
-    options:
-      log-level: info
-      query:
-        base-path: /jaeger
-      prometheus:
-        server-url: "http://kube-prometheus-stack-prometheus:9090"
-    metricsStorage:
-      type: prometheus
-  ingress:
-    ingressClassName: kong
-    annotations:
-      kubernetes.io/tls-acme: "true"
-      cert-manager.io/cluster-issuer: letsencrypt-staging
-    hosts:
-      - jaeger.kuberbitnetes.xyz
-    tls:
-      - hosts:
-          - jaeger.kuberbitnetes.xyz
-        secretName: jaeger-tls
-  storage:
-    options:
-      memory:
-        max-traces: 100000
+# apiVersion: jaegertracing.io/v1
+# kind: "Jaeger"
+# metadata:
+#   name: jaeger
+#   namespace: observability
+# spec:
+#   strategy: allInOne
+#   allInOne:
+#     image: jaegertracing/all-in-one:1.31
+#     options:
+#       log-level: info
+#       query:
+#         base-path: /jaeger
+#       prometheus:
+#         server-url: "http://kube-prometheus-stack-prometheus:9090"
+#     metricsStorage:
+#       type: prometheus
+#   ingress:
+#     ingressClassName: kong
+#     annotations:
+#       kubernetes.io/tls-acme: "true"
+#       cert-manager.io/cluster-issuer: letsencrypt-staging
+#     hosts:
+#       - jaeger.kuberbitnetes.xyz
+#     tls:
+#       - hosts:
+#           - jaeger.kuberbitnetes.xyz
+#         secretName: jaeger-tls
+#   storage:
+#     options:
+#       memory:
+#         max-traces: 100000
