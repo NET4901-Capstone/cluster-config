@@ -17,6 +17,20 @@ data:
 
         include /config/nginx/snippets/authelia-location.conf;
 
+        set $upstream http://bookstack.bookstack.svc;
+
+        location / {
+          include /config/nginx/snippets/proxy.conf;
+          include /config/nginx/snippets/authelia-authrequest.conf;
+          proxy_pass $upstream;
+        }
+      }
+      server {
+        listen 80;
+        server_name whoami.*;
+
+        include /config/nginx/snippets/authelia-location.conf;
+
         set $upstream http://whoami.whoami.svc;
 
         location / {

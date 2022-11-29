@@ -23,6 +23,8 @@ spec:
         cert-manager.io/cluster-issuer: letsencrypt-staging
       subdomain: authelia
     configMap:
+      log:
+        level: debug
       session:
         redis:
           host: redis-master.authelia.svc

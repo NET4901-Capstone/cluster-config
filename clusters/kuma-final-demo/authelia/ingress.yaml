@@ -23,3 +23,30 @@ spec:
     - secretName: bookstack-tls
       hosts:
         - bookstack.kuberbitnetes.xyz
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami-auth
+  namespace: whoami
+  annotations:
+    kubernetes.io/ingress.class: kong
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+spec:
+  rules:
+    - host: whoami-auth.kuberbitnetes.xyz
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: authelia-proxy
+                namespace: authelia
+                port:
+                  number: 80
+  tls:
+    - secretName: whoami-auth-tls
+      hosts:
+        - whoami-auth.kuberbitnetes.xyz
