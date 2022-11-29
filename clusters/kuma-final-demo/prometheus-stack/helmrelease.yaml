@@ -66,10 +66,5 @@ spec:
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
         storageSpec:
-          volumeClaimTemplate:
-            spec:
-              # storageClassName: truenas-iscsi-csi
-              accessModes: ["ReadWriteOnce"]
-              resources:
-                requests:
-                  storage: 5Gi
+          emptyDir:
+            medium: Memory
