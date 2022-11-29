@@ -28,3 +28,4 @@ spec:
       DB_USER: bookstack
       DB_PASS: bookstack
       DB_DATABASE: bookstack
+      APP_URL: https://bookstack.kuberbitnetes.xyz
