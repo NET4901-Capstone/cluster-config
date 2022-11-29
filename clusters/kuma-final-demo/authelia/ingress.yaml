@@ -20,7 +20,7 @@ spec:
                 name: authelia-proxy
                 port:
                   number: 443
-    - host: whoami.kuberbitnetes.xyz
+    - host: whoami-auth.kuberbitnetes.xyz
       http:
         paths:
           - pathType: Prefix
