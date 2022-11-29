@@ -77,7 +77,7 @@ spec:
           access: proxy
           editable: true
           uid: jaeger
-          url: http://jaeger-query.observability
+          url: http://jaeger-query.observability:16686
           jsonData:
             tracesToLogs:
               datasourceUid: loki
@@ -109,6 +109,11 @@ spec:
               - prometheus.kuberbitnetes.xyz
       prometheusSpec:
         externalUrl: https://prometheus.kuberbitnetes.xyz
+        securityContext:
+          runAsGroup: 0
+          runAsNonRoot: false
+          runAsUser: 0
+          fsGroup: 0
         podMetadata:
           labels:
             kuma.io/sidecar-injection: enabled

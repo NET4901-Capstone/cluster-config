@@ -11,10 +11,10 @@ spec:
       log-level: info
       query:
         base-path: /jaeger
-    #   prometheus:
-    #     server-url: "http://kube-prometheus-stack-prometheus:9090"
-    # metricsStorage:
-    #   type: prometheus
+      prometheus:
+        server-url: "http://kube-prometheus-stack-prometheus:9090"
+    metricsStorage:
+      type: prometheus
   ingress:
     ingressClassName: kong
     annotations:
