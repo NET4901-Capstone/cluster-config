@@ -1,7 +1,8 @@
 apiVersion: jaegertracing.io/v1
 kind: "Jaeger"
 metadata:
-  name: "jaeger"
+  name: jaeger
+  namespace: observability
 spec:
   strategy: allInOne
   allInOne:
