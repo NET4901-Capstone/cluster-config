@@ -43,7 +43,6 @@ spec:
             backend:
               service:
                 name: authelia-proxy
-                namespace: authelia
                 port:
                   number: 80
   tls:
