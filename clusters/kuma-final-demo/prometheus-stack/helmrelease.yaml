@@ -66,5 +66,4 @@ spec:
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
         storageSpec:
-          emptyDir:
-            medium: Memory
+          emptyDir: {}
