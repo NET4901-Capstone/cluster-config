@@ -25,5 +25,6 @@ spec:
         annotations:
           kubernetes.io/tls-acme: "true"
           cert-manager.io/cluster-issuer: letsencrypt-staging
-        path: /gui
+          konghq.com/path: /gui
+        path: /
         hostname: kuma.kuberbitnetes.xyz
