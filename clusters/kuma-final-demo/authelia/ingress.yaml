@@ -28,7 +28,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: whoami-auth
-  namespace: whoami
+  namespace: authelia
   annotations:
     kubernetes.io/ingress.class: kong
     kubernetes.io/tls-acme: "true"
