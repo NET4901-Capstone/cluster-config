@@ -35,7 +35,7 @@ data:
 
       server {
         listen 443 ssl;
-        server_name whoami.*;
+        server_name whoami-auth.*;
 
         include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;
