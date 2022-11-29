@@ -13,8 +13,15 @@ data:
     http {
       server {
         listen 80;
+
+        return 301 https://$server_name$request_uri;
+      }
+
+      server {
+        listen 443 ssl;
         server_name bookstack.*;
 
+        include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;
 
         set $upstream http://bookstack.bookstack.svc;
@@ -25,10 +32,12 @@ data:
           proxy_pass $upstream;
         }
       }
+
       server {
-        listen 80;
+        listen 443 ssl;
         server_name whoami.*;
 
+        include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;
 
         set $upstream http://whoami.whoami.svc;
@@ -120,7 +129,7 @@ data:
     # set_escape_uri $target_url $scheme://$http_host$request_uri;
 
     ## Uncomment this line if you're using NGINX without the http_set_misc module.
-    set $target_url https://$http_host$request_uri;
+    set $target_url $scheme://$http_host$request_uri;
 
     ## Save the upstream response headers from Authelia to variables.
     auth_request_set $user $upstream_http_remote_user;
@@ -136,3 +145,6 @@ data:
 
     ## If the subreqest returns 200 pass to the backend, if the subrequest returns 401 redirect to the portal.
     error_page 401 =302 https://authelia.kuberbitnetes.xyz/?rd=$target_url;
+  ssl.conf: |
+    ssl_certificate     /ssl/tls.crt;
+    ssl_certificate_key /ssl/tls.key;

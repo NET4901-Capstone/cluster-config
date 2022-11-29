@@ -21,6 +21,7 @@ spec:
               cpu: "500m"
           ports:
             - containerPort: 80
+            - containerPort: 443
           volumeMounts:
             - mountPath: /etc/nginx/nginx.conf
               name: nginx-config
@@ -38,6 +39,18 @@ spec:
               mountPath: /config/nginx/snippets/authelia-authrequest.conf
               subPath: authelia-authrequest.conf
               readOnly: true
+            - name: nginx-config
+              mountPath: /config/nginx/snippets/ssl.conf
+              subPath: ssl.conf
+              readOnly: true
+            - name: tls-certs
+              mountPath: /ssl/tls.crt
+              subPath: tls.crt
+              readOnly: true
+            - name: tls-certs
+              mountPath: /ssl/tls.key
+              subPath: tls.key
+              readOnly: true
       volumes:
         - name: nginx-config
           configMap:
@@ -51,3 +64,13 @@ spec:
                 path: authelia-location.conf
               - key: authelia-authrequest.conf
                 path: authelia-authrequest.conf
+              - key: ssl.conf
+                path: ssl.conf
+        - name: tls-certs
+          secret:
+            secretName: kuberbitnetes-wildcard
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
