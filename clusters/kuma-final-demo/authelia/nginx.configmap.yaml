@@ -13,7 +13,7 @@ data:
     http {
       server {
         listen 80;
-        server_name whoami.*;
+        server_name bookstack.*;
 
         include /config/nginx/snippets/authelia-location.conf;
 

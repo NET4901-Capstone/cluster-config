@@ -39,6 +39,10 @@ spec:
           enabled: false
         file:
           enabled: true
+      access_control:
+        rules:
+          - domain_regex: "bookstack.kuberbitnetes.xyz"
+            policy: one_factor
 
     pod:
       extraVolumes:
