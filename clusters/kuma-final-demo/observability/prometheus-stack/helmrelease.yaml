@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
-  namespace: monitoring
+  namespace: observability
 spec:
   interval: 5m
   chart:
@@ -50,6 +50,48 @@ spec:
           - secretName: grafana-tls
             hosts:
               - grafana.kuberbitnetes.xyz
+      extraInitContainers:
+        - name: init-kuma-plugins
+          image: alpine
+          command:
+            [
+              "/bin/sh",
+              "-c",
+              "wget -O /tmp/kuma.zip https://github.com/kumahq/kuma-grafana-datasource/releases/download/v0.1.1/kumahq-kuma-datasource-0.1.1.zip && unzip -o /tmp/kuma.zip -d /var/lib/grafana/plugins/ && rm /tmp/kuma.zip",
+            ]
+          volumeMounts:
+            - name: storage
+              mountPath: /var/lib/grafana
+      additionalDataSources:
+        - name: Kuma
+          uid: kuma
+          editable: true
+          type: kumahq-kuma-datasource
+          url: http://kuma-control-plane.kuma-system:5681
+          jsonData:
+            prometheusDataSourceId: "1"
+        - name: Jaeger
+          type: jaeger
+          access: proxy
+          editable: true
+          uid: jaeger
+          url: http://jaeger-query.observability
+          jsonData:
+            tracesToLogs:
+              datasourceUid: loki
+              tags: ["node_id"]
+        - name: Loki
+          type: loki
+          access: proxy
+          editable: true
+          uid: loki
+          url: http://loki.observability:3100
+          jsonData:
+            derivedFields:
+              - datasourceUid: jaeger
+                matcherRegex: '"([0-9a-f]{16})"'
+                name: "traceId"
+                url: "$${__value.raw}"
     prometheus:
       ingress:
         enabled: true
