@@ -24,12 +24,10 @@ data:
         include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;
 
-        set $upstream http://bookstack.bookstack.svc.cluster.local;
-
         location / {
           include /config/nginx/snippets/proxy.conf;
           include /config/nginx/snippets/authelia-authrequest.conf;
-          proxy_pass $upstream;
+          proxy_pass http://bookstack.bookstack.svc;
         }
       }
 
@@ -40,12 +38,10 @@ data:
         include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;
 
-        set $upstream http://whoami.whoami.svc.cluster.local;
-
         location / {
           include /config/nginx/snippets/proxy.conf;
           include /config/nginx/snippets/authelia-authrequest.conf;
-          proxy_pass $upstream;
+          proxy_pass http://whoami.whoami.svc;
         }
       }
     }
