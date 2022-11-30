@@ -417,8 +417,8 @@ metadata:
   annotations:
     networkservicemesh.io: kernel://nse-composition/nsm-1
   labels:
-    app: alpine
-  name: alpine
+    app: ubuntu
+  name: ubuntu
   namespace: ns-nse-composition
 spec:
   affinity:
@@ -432,7 +432,7 @@ spec:
             - nse-kernel
         topologyKey: kubernetes.io/hostname
   containers:
-  - image: alpine:3.15.0
+  - image: ubuntu:latest
     imagePullPolicy: IfNotPresent
     name: alpine
     stdin: true
