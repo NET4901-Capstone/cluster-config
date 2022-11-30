@@ -434,6 +434,6 @@ spec:
   containers:
   - image: ubuntu:latest
     imagePullPolicy: IfNotPresent
-    name: alpine
+    name: ubuntu
     stdin: true
     tty: true
