@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./clusters/kuma-final-demo/base
+  path: ./clusters/traefik-mesh/base
   prune: true
   sourceRef:
     kind: GitRepository
