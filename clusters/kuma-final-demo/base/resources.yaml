@@ -104,6 +104,7 @@ spec:
     - name: cert-manager
     - name: kong
     - name: helm-repositories
+    - name: kuma
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -121,6 +122,7 @@ spec:
     - name: cert-manager
     - name: kong
     - name: helm-repositories
+    - name: kuma
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -133,6 +135,8 @@ metadata:
 spec:
   interval: 5m
   path: "./clusters/kuma-final-demo/nginx-waf"
+  dependsOn:
+    - name: kuma
   prune: true
   sourceRef:
     kind: GitRepository
