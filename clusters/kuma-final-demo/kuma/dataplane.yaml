@@ -16,3 +16,10 @@ spec:
         sampling: 100.0
         conf:
           url: http://jaeger-collector.observability:9411/api/v2/spans
+  logging:
+    defaultBackend: stdout
+    backends:
+      - name: stdout
+        type: file
+        conf:
+          path: /dev/stdout
