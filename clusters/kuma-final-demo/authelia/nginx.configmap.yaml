@@ -19,20 +19,6 @@ data:
 
       server {
         listen 443 ssl;
-        server_name bookstack.*;
-
-        include /config/nginx/snippets/ssl.conf;
-        include /config/nginx/snippets/authelia-location.conf;
-
-        location / {
-          include /config/nginx/snippets/proxy.conf;
-          include /config/nginx/snippets/authelia-authrequest.conf;
-          proxy_pass http://bookstack.bookstack.svc;
-        }
-      }
-
-      server {
-        listen 443 ssl;
         server_name whoami-auth.*;
 
         include /config/nginx/snippets/ssl.conf;

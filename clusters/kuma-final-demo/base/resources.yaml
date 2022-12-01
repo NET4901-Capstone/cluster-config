@@ -34,6 +34,7 @@ spec:
   interval: 5m
   path: "./clusters/kuma-final-demo/kuma"
   prune: true
+  wait: true
   dependsOn:
     - name: crds
     - name: helm-repositories
@@ -85,23 +86,6 @@ spec:
   path: "./clusters/kuma-final-demo/kong"
   prune: true
   dependsOn:
-    - name: helm-repositories
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: bookstack
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./clusters/kuma-final-demo/bookstack"
-  prune: true
-  dependsOn:
-    - name: cert-manager
-    - name: kong
     - name: helm-repositories
   sourceRef:
     kind: GitRepository
