@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: nginx-config
   namespace: nginx-waf
-stringData:
+data:
   default.conf: |
     # Nginx configuration for both HTTP and SSL
 
