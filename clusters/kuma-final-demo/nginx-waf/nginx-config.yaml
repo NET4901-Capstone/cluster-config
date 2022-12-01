@@ -4,7 +4,7 @@ metadata:
   name: nginx-config
   namespace: nginx-waf
 data:
-  default.conf: |
+  whoami.conf: |
     # Nginx configuration for both HTTP and SSL
 
     map $http_upgrade $connection_upgrade {

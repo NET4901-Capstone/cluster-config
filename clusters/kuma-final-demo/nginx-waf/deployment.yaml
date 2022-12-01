@@ -22,14 +22,14 @@ spec:
           ports:
             - containerPort: 80
           volumeMounts:
-            - mountPath: /etc/nginx/conf.d/default.conf
+            - mountPath: /etc/nginx/conf.d/whoami.conf
               name: nginx-config
-              subPath: default.conf
+              subPath: whoami.conf
               readOnly: true
       volumes:
         - name: nginx-config
           configMap:
             name: nginx-config
             items:
-              - key: default.conf
-                path: default.conf
+              - key: whoami.conf
+                path: whoami.conf
