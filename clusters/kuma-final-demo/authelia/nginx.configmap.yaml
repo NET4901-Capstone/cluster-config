@@ -27,7 +27,7 @@ data:
         location / {
           include /config/nginx/snippets/proxy.conf;
           include /config/nginx/snippets/authelia-authrequest.conf;
-          proxy_pass http://whoami.whoami.svc;
+          proxy_pass http://nginx-waf.nginx-waf.svc;
         }
       }
     }
