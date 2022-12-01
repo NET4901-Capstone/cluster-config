@@ -15,8 +15,6 @@ data:
     server {
         listen 80;
         server_name whoami-auth.*;
-        resolver kube-dns.kube-system.svc.cluster.local valid=5s;
-        set $upstream http://whoami.whoami.svc:80;
         set $always_redirect off;
 
         location / {
@@ -26,10 +24,19 @@ data:
                 return 301 https://$host$request_uri;
             }
 
-            include includes/proxy_backend.conf;
+            proxy_set_header Host $host;
+            proxy_set_header Proxy "";
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
 
-            index index.html index.htm;
-            root /usr/share/nginx/html;
+            proxy_http_version 1.1;
+            proxy_buffering off;
+            proxy_connect_timeout 60s;
+            proxy_read_timeout 36000s;
+            proxy_redirect off;
+
+            proxy_pass_header Authorization;
+            proxy_pass http://whoami.whoami.svc:80;
         }
 
         include includes/location_common.conf;
