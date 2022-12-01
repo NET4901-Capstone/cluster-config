@@ -77,7 +77,7 @@ spec:
           access: proxy
           editable: true
           uid: jaeger
-          url: http://jaeger-query.observability:16686
+          url: http://jaeger-query.observability
           jsonData:
             tracesToLogs:
               datasourceUid: loki
