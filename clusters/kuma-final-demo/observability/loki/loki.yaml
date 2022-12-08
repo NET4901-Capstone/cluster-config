@@ -1,33 +1,33 @@
-apiVersion: policy/v1beta1
-kind: PodSecurityPolicy
-metadata:
-  name: loki-promtail
-  namespace: observability
-  labels:
-    app: promtail
-    release: loki
-spec:
-  privileged: false
-  allowPrivilegeEscalation: false
-  volumes:
-    - "secret"
-    - "configMap"
-    - "hostPath"
-  hostNetwork: false
-  hostIPC: false
-  hostPID: false
-  runAsUser:
-    rule: "RunAsAny"
-  seLinux:
-    rule: "RunAsAny"
-  supplementalGroups:
-    rule: "RunAsAny"
-  fsGroup:
-    rule: "RunAsAny"
-  readOnlyRootFilesystem: true
-  requiredDropCapabilities:
-    - ALL
----
+# apiVersion: policy/v1beta1
+# kind: PodSecurityPolicy
+# metadata:
+#   name: loki-promtail
+#   namespace: observability
+#   labels:
+#     app: promtail
+#     release: loki
+# spec:
+#   privileged: false
+#   allowPrivilegeEscalation: false
+#   volumes:
+#     - "secret"
+#     - "configMap"
+#     - "hostPath"
+#   hostNetwork: false
+#   hostIPC: false
+#   hostPID: false
+#   runAsUser:
+#     rule: "RunAsAny"
+#   seLinux:
+#     rule: "RunAsAny"
+#   supplementalGroups:
+#     rule: "RunAsAny"
+#   fsGroup:
+#     rule: "RunAsAny"
+#   readOnlyRootFilesystem: true
+#   requiredDropCapabilities:
+#     - ALL
+# ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
