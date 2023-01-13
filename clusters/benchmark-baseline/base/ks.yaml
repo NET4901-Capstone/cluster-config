@@ -31,7 +31,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./clusters/benchmark-baseline/wrk/app"
+  path: "./clusters/benchmark-baseline/wrk"
   prune: true
   sourceRef:
     kind: GitRepository
