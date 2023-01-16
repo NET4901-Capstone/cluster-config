@@ -49,16 +49,6 @@ spec:
             hosts:
               - *host
 
-    # persistence:
-    #   config:
-    #     enabled: true
-    #     type: pvc
-    #     size: 5Gi
-    #     accessMode: ReadWriteOnce
-    #     mountPath: /data
-    #     storageClass: longhorn
-    #     retain: true
-
     resources:
       requests:
         cpu: 10m

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wrk
+  labels:
+    name: wrk
+spec:
+  containers:
+  - name: wrk
+    image: markmckessock/wrk
+    command: ["sleep", "36000"]
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
