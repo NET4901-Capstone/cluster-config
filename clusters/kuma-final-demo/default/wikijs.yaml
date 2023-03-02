@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: wikijs
     helm.sh/chart: app-template-1.2.1
+  namespace: default
 spec:
   type: ClusterIP
   ports:
@@ -27,6 +28,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wikijs
+  namespace: default
   labels:
     app.kubernetes.io/instance: wikijs
     app.kubernetes.io/managed-by: Helm
