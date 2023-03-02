@@ -141,3 +141,19 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: default-ns
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/default"
+  dependsOn:
+    - name: kuma
+    - name: cert-manager
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

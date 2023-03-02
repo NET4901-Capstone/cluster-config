@@ -36,7 +36,7 @@ data:
             proxy_redirect off;
 
             proxy_pass_header Authorization;
-            proxy_pass http://whoami.whoami.svc:80;
+            proxy_pass http://wikijs.default.svc:3000;
         }
 
         include includes/location_common.conf;
