@@ -14,7 +14,7 @@ data:
 
     server {
         listen 80;
-        server_name wikijs.default.svc;
+        server_name nginx-waf.nginx-waf.svc;
         set $always_redirect off;
 
         location / {
