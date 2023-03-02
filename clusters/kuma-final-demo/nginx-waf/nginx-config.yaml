@@ -38,7 +38,4 @@ data:
             proxy_pass_header Authorization;
             proxy_pass http://wikijs.default.svc:3000;
         }
-
-        include includes/location_common.conf;
-
     }
