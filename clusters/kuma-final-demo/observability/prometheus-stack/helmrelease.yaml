@@ -38,6 +38,15 @@ spec:
       grafana.ini:
         plugins:
           allow_loading_unsigned_plugins: "kumahq-kuma-datasource"
+      extraContainers: |
+        - name: renderer
+          image: grafana/grafana-image-renderer:latest
+          ports:
+            - name: http
+              containerPort: 8081
+      env:
+        GF_RENDERING_SERVER_URL: http://localhost:8081/render
+        GF_RENDERING_CALLBACK_URL: http://localhost:3000/
       podLabels:
         kuma.io/sidecar-injection: enabled
       ingress:
