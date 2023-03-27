@@ -1,0 +1,16 @@
+---
+tunnel: internet
+credentials-file: /etc/cloudflared/creds/credentials.json
+protocol: quic
+metrics: 0.0.0.0:2000
+no-autoupdate: false
+ingress:
+  - hostname: api.kuberbitnetes.xyz
+    service: kubernetes.default.svc
+    originRequest:
+      noTLSVerify: true
+  - hostname: "*.kuberbitnetes.xyz"
+    service: https://ingress-nginx-controller.network.svc
+    originRequest:
+      noTLSVerify: true
+  - service: http_status:404
