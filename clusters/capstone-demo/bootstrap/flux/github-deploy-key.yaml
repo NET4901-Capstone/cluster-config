@@ -44,5 +44,5 @@ stringData:
     c4c6T1fP9vA2E8qyN+CXAyDByQ2SfQZXM6rINEmkfmOyDlUbGnPgOCys9wQ4VTT56xRjv+
     +53xe0HUHO1eUAAAAabW1ja2Vzc29ja0BERVNLVE9QLVUyNVJKRTUB
     -----END OPENSSH PRIVATE KEY-----
-  known_hosts: |
+  knownhosts: |
     github.com ecdsa-sha2-nistp256 
