@@ -6,9 +6,9 @@ metrics: 0.0.0.0:2000
 no-autoupdate: false
 ingress:
   - hostname: api.kuberbitnetes.xyz
-    service: https://kubernetes.default.svc:443
+    service: tcp://kubernetes.default.svc:443
     originRequest:
-      noTLSVerify: true
+      proxyType: socks
   - hostname: "*.kuberbitnetes.xyz"
     service: https://ingress-nginx-controller.network.svc
     originRequest:
