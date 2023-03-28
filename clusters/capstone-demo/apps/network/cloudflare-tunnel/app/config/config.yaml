@@ -5,8 +5,6 @@ protocol: quic
 metrics: 0.0.0.0:2000
 no-autoupdate: false
 ingress:
-  - hostname: test.kuberbitnetes.xyz
-    service: hello_world
   - hostname: api.kuberbitnetes.xyz
     service: https://kubernetes.default.svc:443
     originRequest:
