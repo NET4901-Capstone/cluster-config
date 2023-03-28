@@ -8,9 +8,8 @@ ingress:
   - hostname: test.kuberbitnetes.xyz
     service: hello_world
   - hostname: api.kuberbitnetes.xyz
-    service: tcp://kubernetes.default.svc:443
+    service: https://kubernetes.default.svc:443
     originRequest:
-      proxyType: socks
       noTLSVerify: true
   - hostname: "*.kuberbitnetes.xyz"
     service: https://ingress-nginx-controller.network.svc
