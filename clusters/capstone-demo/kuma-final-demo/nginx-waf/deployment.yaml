@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-waf
+  namespace: nginx-waf
+spec:
+  selector:
+    matchLabels:
+      app: nginx-waf
+  template:
+    metadata:
+      labels:
+        app: nginx-waf
+    spec:
+      containers:
+        - name: nginx-waf
+          image: owasp/modsecurity-crs:nginx
+          resources:
+            requests:
+              cpu: "10m"
+            limits:
+              memory: "128Mi"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/whoami.conf
+              name: nginx-config
+              subPath: whoami.conf
+              readOnly: true
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+            items:
+              - key: whoami.conf
+                path: whoami.conf

@@ -1,0 +1,191 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: observability
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      interval: 1m
+  timeout: 15m
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
+  values:
+    alertmanager:
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: kong
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts:
+          - alertmanager.kuberbitnetes.xyz
+        tls:
+          - secretName: alertmanager-tls
+            hosts:
+              - alertmanager.kuberbitnetes.xyz
+      alertmanagerSpec:
+        externalUrl: https://alertmanager.kuberbitnetes.xyz
+    grafana:
+      grafana.ini:
+        plugins:
+          allow_loading_unsigned_plugins: "kumahq-kuma-datasource"
+      extraContainers: |
+        - name: renderer
+          image: grafana/grafana-image-renderer:latest
+          ports:
+            - name: http
+              containerPort: 8081
+      env:
+        GF_RENDERING_SERVER_URL: http://localhost:8081/render
+        GF_RENDERING_CALLBACK_URL: http://localhost:3000/
+      podLabels:
+        kuma.io/sidecar-injection: enabled
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: kong
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts:
+          - grafana.kuberbitnetes.xyz
+        tls:
+          - secretName: grafana-tls
+            hosts:
+              - grafana.kuberbitnetes.xyz
+      extraInitContainers:
+        - name: init-kuma-plugins
+          image: alpine
+          command:
+            [
+              "/bin/sh",
+              "-c",
+              "wget -O /tmp/kuma.zip https://github.com/kumahq/kuma-grafana-datasource/releases/download/v0.1.1/kumahq-kuma-datasource-0.1.1.zip && unzip -o /tmp/kuma.zip -d /var/lib/grafana/plugins/ && rm /tmp/kuma.zip",
+            ]
+          volumeMounts:
+            - name: storage
+              mountPath: /var/lib/grafana
+      additionalDataSources:
+        - name: Kuma
+          uid: kuma
+          editable: true
+          type: kumahq-kuma-datasource
+          url: http://kuma-control-plane.kuma-system:5681
+          jsonData:
+            prometheusDataSourceId: "1"
+        - name: Jaeger
+          type: jaeger
+          access: proxy
+          editable: true
+          uid: jaeger
+          url: http://jaeger-query.observability
+          jsonData:
+            tracesToLogs:
+              datasourceUid: loki
+              tags: ["node_id"]
+        - name: Loki
+          type: loki
+          access: proxy
+          editable: true
+          uid: loki
+          url: http://loki.observability:3100
+          jsonData:
+            derivedFields:
+              - datasourceUid: jaeger
+                matcherRegex: '"([0-9a-f]{16})"'
+                name: "traceId"
+                url: "$${__value.raw}"
+    prometheus:
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: kong
+          kubernetes.io/tls-acme: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts:
+          - prometheus.kuberbitnetes.xyz
+        tls:
+          - secretName: prometheus-tls
+            hosts:
+              - prometheus.kuberbitnetes.xyz
+      prometheusSpec:
+        externalUrl: https://prometheus.kuberbitnetes.xyz
+        securityContext:
+          runAsGroup: 0
+          runAsNonRoot: false
+          runAsUser: 0
+          fsGroup: 0
+        podMetadata:
+          labels:
+            kuma.io/sidecar-injection: enabled
+        additionalScrapeConfigs:
+          - job_name: "kuma-dataplanes"
+            scrape_interval: "5s"
+            relabel_configs:
+              - source_labels:
+                  - __meta_kuma_mesh
+                regex: "(.*)"
+                target_label: mesh
+              - source_labels:
+                  - __meta_kuma_dataplane
+                regex: "(.*)"
+                target_label: dataplane
+              - source_labels:
+                  - __meta_kuma_service
+                regex: "(.*)"
+                target_label: service
+              - action: labelmap
+                regex: __meta_kuma_label_(.+)
+              - source_labels:
+                  - k8s_kuma_io_name
+                regex: "(.*)"
+                target_label: pod
+              - source_labels:
+                  - k8s_kuma_io_namespace
+                regex: "(.*)"
+                target_label: namespace
+            kuma_sd_configs:
+              - server: http://kuma-control-plane.kuma-system:5676
+          - job_name: kubernetes-pods
+            kubernetes_sd_configs:
+              - role: pod
+            relabel_configs:
+              - action: keep
+                regex: true
+                source_labels:
+                  - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+              - action: replace
+                regex: (.+)
+                source_labels:
+                  - __meta_kubernetes_pod_annotation_prometheus_io_path
+                target_label: __metrics_path__
+              - action: replace
+                regex: ([^:]+)(?::\d+)?;(\d+)
+                replacement: $1:$2
+                source_labels:
+                  - __address__
+                  - __meta_kubernetes_pod_annotation_prometheus_io_port
+                target_label: __address__
+              - action: labelmap
+                regex: __meta_kubernetes_pod_label_(.+)
+              - action: replace
+                source_labels:
+                  - __meta_kubernetes_namespace
+                target_label: kubernetes_namespace
+              - action: replace
+                source_labels:
+                  - __meta_kubernetes_pod_name
+                target_label: kubernetes_pod_name
+        retentionSize: 5GB
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        storageSpec:
+          emptyDir: {}

@@ -1,0 +1,159 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: helm-repositories
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./helm_repositories"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: crds
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/crds"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: kuma
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/kuma"
+  prune: true
+  wait: true
+  dependsOn:
+    - name: crds
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cert-manager
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/cert-manager"
+  prune: true
+  dependsOn:
+    - name: crds
+    - name: helm-repositories
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: observability
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/observability"
+  prune: true
+  dependsOn:
+    - name: kuma
+    - name: helm-repositories
+    - name: crds
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: kong
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/kong"
+  prune: true
+  dependsOn:
+    - name: helm-repositories
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: authelia
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/authelia"
+  prune: true
+  dependsOn:
+    - name: cert-manager
+    - name: kong
+    - name: helm-repositories
+    - name: kuma
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: whoami
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/whoami"
+  prune: true
+  dependsOn:
+    - name: cert-manager
+    - name: kong
+    - name: helm-repositories
+    - name: kuma
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: nginx-waf
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/nginx-waf"
+  dependsOn:
+    - name: kuma
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: default-ns
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./clusters/kuma-final-demo/default"
+  dependsOn:
+    - name: kuma
+    - name: cert-manager
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
