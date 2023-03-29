@@ -7,4 +7,4 @@ resources:
   # Flux-Kustomizations
   - ./coredns/ks.yaml
   - ./reloader/ks.yaml
-  
+  - ./kuma/ks.yaml
