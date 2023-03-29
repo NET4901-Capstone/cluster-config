@@ -6,3 +6,5 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./cloudflare-tunnel/ks.yaml
+  - ./cloudflare-ddns/ks.yaml
+  
