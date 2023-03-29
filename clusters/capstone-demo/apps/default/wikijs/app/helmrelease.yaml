@@ -37,3 +37,5 @@ spec:
       tls:
         - hosts:
             - wikijs.kuberbitnetes.xyz
+    portgresql:
+      enabled: false
