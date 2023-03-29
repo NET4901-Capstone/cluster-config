@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wireguard
+spec:
+  selector:
+    matchLabels:
+      app: wireguard
+  template:
+    metadata:
+      labels:
+        app: wireguard
+    spec:
+      containers:
+      - name: wireguard
+        image: ghcr.io/linuxserver/wireguard
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+              - SYS_MODULE
+          privileged: true
+        volumeMounts:
+          - name: host-volumes
+            mountPath: /lib/modules
+          - name: wireguard-config
+            mountPath: /config/wg0.conf
+            subPath: wg0.conf
+      volumes:
+        - name: host-volumes
+          hostPath:
+            path: /lib/modules
+            type: Directory
+        - name: wireguard-config
+          configMap:
+            name: wireguard-config
+            items:
+              - key: wg0.conf
+                path: wg0.conf
