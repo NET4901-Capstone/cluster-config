@@ -1,0 +1,28 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "kuberbitnetes.xyz-production"
+spec:
+  secretName: "kuberbitnetes.xyz-production-tls"
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "kuberbitnetes.xyz"
+  dnsNames:
+    - "kuberbitnetes.xyz"
+    - "*.kuberbitnetes.xyz"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "kuberbitnetes.xyz-staging"
+spec:
+  secretName: "kuberbitnetes.xyz-staging-tls"
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  commonName: "kuberbitnetes.xyz"
+  dnsNames:
+    - "kuberbitnetes.xyz"
+    - "*.kuberbitnetes.xyz"

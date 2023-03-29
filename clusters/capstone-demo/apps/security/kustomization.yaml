@@ -5,7 +5,4 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./cloudflare-tunnel/ks.yaml
-  - ./wireguard-client/ks.yaml
-  - ./ingress-nginx/ks.yaml
-  
+  - ./cert-manager/ks.yaml
