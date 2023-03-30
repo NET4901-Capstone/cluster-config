@@ -1,0 +1,11 @@
+﻿---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kuma-system
+resources:
+  - ./certs.secret.yaml
+  - ./dataplane.yaml
+  - ./helmrelease.yaml
+  - ./namespace.yaml
+  - ./trafficlog.yaml
+  - ./traffictrace.yaml
