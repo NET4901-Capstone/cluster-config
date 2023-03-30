@@ -1,0 +1,7 @@
+﻿---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuma-system
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
