@@ -7,3 +7,4 @@ resources:
   - ./dataplane.yaml
   - ./trafficlog.yaml
   - ./traffictrace.yaml
+  - ./kuma-crd.yaml
