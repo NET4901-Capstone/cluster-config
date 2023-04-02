@@ -25,10 +25,10 @@ spec:
         level: debug
       session:
         redis:
-          host: redis-master.authelia.svc
+          host: redis-master.authelia.svc.cluster.local
       storage:
         postgres:
-          host: postgres-postgresql.authelia.svc
+          host: postgres-postgresql.authelia.svc.cluster.local
       notifier:
         smtp:
           enabled: false
