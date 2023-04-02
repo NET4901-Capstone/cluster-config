@@ -31,4 +31,4 @@ metadata:
   namespace: default
   annotations: 
     kuma.io/sidecar-injection: enabled
-    kuma.io/mesh: default" | kubectl apply -f - && kubectl delete pod --all -n default
+    kuma.io/mesh: default
