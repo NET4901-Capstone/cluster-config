@@ -3,6 +3,6 @@ kind: Namespace
 metadata:
   name: observability
   labels:
-    kuma.io/sidecar-injection: enabled
+    kuma.io/sidecar-injection: disabled
   annotations:
     kuma.io/mesh: default
