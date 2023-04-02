@@ -24,12 +24,3 @@ spec:
         type: file
         conf:
           path: /dev/stdout
----
-apiVersion: v1
-kind: Namespace
-metadata: 
-  name: default
-  namespace: default
-  annotations: 
-    kuma.io/sidecar-injection: enabled
-    kuma.io/mesh: default
