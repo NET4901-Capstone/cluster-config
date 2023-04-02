@@ -19,7 +19,7 @@ data:
 
       server {
         listen 443 ssl;
-        server_name whoami-auth.*;
+        server_name wikijs.kuberbitnetes.xyz;
 
         include /config/nginx/snippets/ssl.conf;
         include /config/nginx/snippets/authelia-location.conf;

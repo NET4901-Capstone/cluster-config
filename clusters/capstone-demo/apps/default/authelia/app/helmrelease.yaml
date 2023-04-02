@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: authelia
-  namespace: authelia
 spec:
   chart:
     spec:
@@ -18,7 +17,6 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: kong
         kubernetes.io/tls-acme: "true"
         cert-manager.io/cluster-issuer: letsencrypt-staging
       subdomain: authelia
@@ -43,10 +41,10 @@ spec:
           enabled: true
       access_control:
         rules:
-          - domain_regex: "bookstack.kuberbitnetes.xyz"
+          - domain_regex: "wikijs.kuberbitnetes.xyz"
             policy: one_factor
-          - domain_regex: "whoami-auth.kuberbitnetes.xyz"
-            policy: one_factor
+          # - domain_regex: "whoami-auth.kuberbitnetes.xyz"
+          #   policy: one_factor
 
     pod:
       extraVolumes:
