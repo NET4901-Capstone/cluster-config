@@ -19,7 +19,7 @@ spec:
       annotations:
         kubernetes.io/tls-acme: "true"
         cert-manager.io/cluster-issuer: letsencrypt-staging
-      subdomain: authelia
+      subdomain: auth
     configMap:
       log:
         level: debug
