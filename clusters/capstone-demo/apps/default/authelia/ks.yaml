@@ -2,6 +2,38 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
+  name: cluster-apps-authelia-redis
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: "true"
+spec:
+  interval: 10m
+  path: "./clusters/capstone-demo/apps/default/authelia/redis"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cluster-apps-authelia-postgres
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: "true"
+spec:
+  interval: 10m
+  path: "./clusters/capstone-demo/apps/default/authelia/postgres"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
   name: cluster-apps-authelia
   namespace: flux-system
   labels:
@@ -12,6 +44,8 @@ spec:
   dependsOn:
     - name: cluster-apps-wikijs
     - name: cluster-apps-ingress-nginx
+    - name: cluster-apps-authelia-redis
+    - name: cluster-apps-authelia-postgres
   prune: true
   sourceRef:
     kind: GitRepository

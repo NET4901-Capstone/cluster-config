@@ -5,8 +5,6 @@ namespace: default
 resources:
   - helmrelease.yaml
   - users.yaml
-  - postgres.helmrelease.yaml
-  - redis.helmrelease.yaml
   # - ingress.yaml
   # - nginx.configmap.yaml
   # - nginx.deployment.yaml
