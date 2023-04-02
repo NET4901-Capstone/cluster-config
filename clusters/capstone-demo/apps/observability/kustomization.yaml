@@ -8,4 +8,3 @@ resources:
   - ./prometheus-stack/ks.yaml
   - ./loki/ks.yaml
   - ./jaeger/ks.yaml
-  - ./grafana-dashboards/ks.yaml
