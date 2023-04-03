@@ -24,7 +24,7 @@ metadata:
     substitution.flux.home.arpa/enabled: "true"
 spec:
   interval: 10m
-  path: "./clusters/capstone-demo/apps/observability/prometheus-stack/app"
+  path: "./clusters/capstone-demo/apps/observability/prometheus-stack/grafana-dashboards"
   prune: true
   dependsOn:
     - name: cluster-apps-kube-prometheus-stack
