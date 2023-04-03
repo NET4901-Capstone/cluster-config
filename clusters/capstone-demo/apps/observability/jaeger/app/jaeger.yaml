@@ -16,7 +16,7 @@ spec:
     metricsStorage:
       type: prometheus
   ingress:
-    ingressClassName: kong
+    ingressClassName: nginx
     annotations:
       kubernetes.io/tls-acme: "true"
       cert-manager.io/cluster-issuer: letsencrypt-staging

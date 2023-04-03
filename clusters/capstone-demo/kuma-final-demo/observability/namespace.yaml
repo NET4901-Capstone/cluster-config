@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: observability
-  labels:
-    kuma.io/sidecar-injection: disabled
-  annotations:
-    kuma.io/mesh: default
