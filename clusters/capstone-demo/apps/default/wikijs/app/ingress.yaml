@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  name: wikijs-internal
+spec:
+  ingressClassName: nginx-internal
+  rules:
+  - host: wikijs.kuberbitnetes.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: wikijs
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - wikijs.kuberbitnetes.xyz
