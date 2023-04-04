@@ -10,7 +10,7 @@ data:
         lameduck 5s
       }
       ready
-      rewrite name wikijs.kuberbitnetes.xyz ingress-nginx-controller.network.svc.cluster.local
+      rewrite name wikijs.kuberbitnetes.xyz ingress-nginx-internal-controller.network.svc.cluster.local
       kubernetes cluster.local in-addr.arpa ip6.arpa {
         pods insecure
         fallthrough in-addr.arpa ip6.arpa
