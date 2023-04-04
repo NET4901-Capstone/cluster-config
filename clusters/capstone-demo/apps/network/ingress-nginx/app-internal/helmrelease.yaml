@@ -36,6 +36,7 @@ spec:
       ingressClassResource:
         name: nginx-internal
         controllerValue: "k8s.io/internal-nginx"
+      ingressClass: nginx-internal
       config:
         client-header-timeout: 120
         client-body-buffer-size: "100M"
