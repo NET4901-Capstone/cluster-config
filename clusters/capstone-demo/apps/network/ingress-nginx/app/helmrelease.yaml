@@ -31,6 +31,10 @@ spec:
           value: "America/Toronto"
       service:
         type: NodePort
+        appProtocol: false
+        annotations:
+          80.service.kuma.io/protocol: tcp
+          443.service.kuma.io/protocol: tcp
       publishService:
         enabled: true
       ingressClassResource:
