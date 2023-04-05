@@ -96,8 +96,7 @@ spec:
         patchesJson6902:
           - target:
               kind: Service
-              name: nginx-ingress-controller
-              namespace: network
+              name: ingress-nginx-controller
             patch:
               - op: add
                 path: /spec/ports/0/appProtocol
