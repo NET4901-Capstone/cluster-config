@@ -31,7 +31,6 @@ spec:
           value: "America/Toronto"
       service:
         type: NodePort
-        appProtocol: false
       publishService:
         enabled: true
       ingressClassResource:
@@ -89,23 +88,3 @@ spec:
       kind: ConfigMap
       name: cloudflare-networks
       valuesKey: cloudflare-networks.txt
-  postRenderers:
-    - kustomize:
-        patchesJson6902:
-          - target:
-              kind: Service
-              name: ingress-nginx-internal-controller
-            patch:
-              - op: add
-                path: /spec/ports/0/appProtocol
-                value: tcp
-              - op: add
-                path: /spec/ports/1/appProtocol
-                value: tcp
-          - target:
-              kind: Service
-              name: ingress-nginx-internal-controller-admission
-            patch:
-              - op: replace
-                path: /spec/ports/0/appProtocol
-                value: tcp
