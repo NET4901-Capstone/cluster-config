@@ -73,7 +73,7 @@ spec:
           memory: 250Mi
         limits:
           memory: 500Mi
-      admissionWebhooks:
+      admissionWebhook:
         patch:
           securityContext:
             runAsNonRoot: false
