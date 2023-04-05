@@ -72,6 +72,10 @@ spec:
           memory: 250Mi
         limits:
           memory: 500Mi
+      admissionWebhooks:
+        patch:
+          securityContext:
+            runAsNonRoot: false
     defaultBackend:
       enabled: true
       image:
