@@ -31,9 +31,7 @@ spec:
           value: "America/Toronto"
       service:
         type: NodePort
-        annotations:
-          80.service.kuma.io/protocol: tcp
-          443.service.kuma.io/protocol: tcp
+        appProtocol: false
       publishService:
         enabled: true
       ingressClassResource:
@@ -96,16 +94,16 @@ spec:
   postRenderers:
     - kustomize:
         patchesJson6902:
-          # - target:
-          #     kind: Service
-          #     name: ingress-nginx-controller
-          #   patch:
-          #     - op: add
-          #       path: /spec/ports/0/appProtocol
-          #       value: tcp
-          #     - op: add
-          #       path: /spec/ports/1/appProtocol
-          #       value: tcp
+          - target:
+              kind: Service
+              name: ingress-nginx-controller
+            patch:
+              - op: add
+                path: /spec/ports/0/appProtocol
+                value: tcp
+              - op: add
+                path: /spec/ports/1/appProtocol
+                value: tcp
           - target:
               kind: Service
               name: ingress-nginx-controller-admission
