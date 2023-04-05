@@ -29,6 +29,8 @@ spec:
     controller:
       annotations:
         reloader.stakater.com/auto: "true"
+      labels:
+        kuma.io/sidecar-injection: enabled
 
     image:
       repository: cloudflare/cloudflared

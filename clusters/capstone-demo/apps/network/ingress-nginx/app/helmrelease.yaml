@@ -26,6 +26,8 @@ spec:
     keepHistory: false
   values:
     controller:
+      annotations:
+        kuma.io/sidecar-injection: enabled
       extraEnvs:
         - name: TZ
           value: "America/Toronto"
